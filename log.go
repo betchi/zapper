@@ -1,6 +1,7 @@
 package zapper
 
 import (
+	"fmt"
 	"os"
 
 	"go.uber.org/zap"
@@ -162,4 +163,9 @@ func (l *Logger) Warn(message string, fields ...Field) {
 // Error logs a message at ErrorLevel. The message includes any fields passed at the log site, as well as any fields accumulated on the logger.
 func (l *Logger) Error(message string, fields ...Field) {
 	l.zap.Error(message, fields...)
+}
+
+// Printf logs a message at DebugLevel. For gorp trace message
+func (l *Logger) Printf(format string, v ...interface{}) {
+	l.zap.Debug(fmt.Sprintf(format, v))
 }
