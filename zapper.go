@@ -35,6 +35,8 @@ var (
 	Warn = logger.Warn
 	// Error logs a message at ErrorLevel. The message includes any fields passed at the log site, as well as any fields accumulated on the logger.
 	Error = logger.Error
+	// Fatal logs a message at FatalLevel. The message includes any fields passed at the log site, as well as any fields accumulated on the logger.
+	Fatal = logger.Fatal
 
 	encoderConfig = newEncoderConfig()
 )
@@ -87,6 +89,7 @@ func InitGlobalLogger(config *Config) {
 	Info = logger.Info
 	Warn = logger.Warn
 	Error = logger.Error
+	Fatal = logger.Fatal
 }
 
 // GlobalLogger retrieve global logger
@@ -108,8 +111,6 @@ func NewLogger(config *Config) *Logger {
 		switch config.ConsoleFormat {
 		case "json":
 			encoder = jsonEncoder()
-		case "text":
-			fallthrough
 		default:
 			encoder = planeTextEncoder()
 		}
