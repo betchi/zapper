@@ -76,15 +76,7 @@ func newEncoderConfig() zapcore.EncoderConfig {
 
 // InitGlobalLogger initialize global logger
 func InitGlobalLogger(config *Config) {
-	logger = NewLogger(&Config{
-		EnableConsole: config.EnableConsole,
-		ConsoleFormat: config.ConsoleFormat,
-		ConsoleLevel:  config.ConsoleLevel,
-		EnableFile:    config.EnableFile,
-		FileFormat:    config.FileFormat,
-		FileLevel:     config.FileLevel,
-		FilePath:      config.FilePath,
-	})
+	logger = NewLogger(config)
 	Debug = logger.Debug
 	Info = logger.Info
 	Warn = logger.Warn
@@ -111,6 +103,8 @@ func NewLogger(config *Config) *Logger {
 		switch config.ConsoleFormat {
 		case "json":
 			encoder = jsonEncoder()
+		case "text":
+			fallthrough
 		default:
 			encoder = planeTextEncoder()
 		}
@@ -120,9 +114,12 @@ func NewLogger(config *Config) *Logger {
 
 	if config.EnableFile {
 		writer := zapcore.AddSync(&lumberjack.Logger{
-			Filename: config.FilePath,
-			MaxSize:  100,
-			Compress: true,
+			Filename:   config.FilePath,
+			MaxSize:    config.FileMaxSize,
+			MaxAge:     config.FileMaxAge,
+			MaxBackups: config.FileMaxBackups,
+			LocalTime:  config.FileLocalTime,
+			Compress:   config.FileCompress,
 		})
 		var encoder zapcore.Encoder
 		switch config.FileFormat {
@@ -164,43 +161,88 @@ type Logger struct {
 }
 
 // Debug logs a message at DebugLevel. The message includes any fields passed at the log site, as well as any fields accumulated on the logger.
-func (l *Logger) Debug(message string, fields ...zapcore.Field) {
+func (l *Logger) Debug(msg string, fields ...zapcore.Field) {
 	if l == nil {
 		return
 	}
-	l.zap.Debug(message, fields...)
+	l.zap.Debug(msg, fields...)
 }
 
 // Info logs a message at InfoLevel. The message includes any fields passed at the log site, as well as any fields accumulated on the logger.
-func (l *Logger) Info(message string, fields ...zapcore.Field) {
+func (l *Logger) Info(msg string, fields ...zapcore.Field) {
 	if l == nil {
 		return
 	}
-	l.zap.Info(message, fields...)
+	l.zap.Info(msg, fields...)
 }
 
 // Warn logs a message at WarnLevel. The message includes any fields passed at the log site, as well as any fields accumulated on the logger.
-func (l *Logger) Warn(message string, fields ...zapcore.Field) {
+func (l *Logger) Warn(msg string, fields ...zapcore.Field) {
 	if l == nil {
 		return
 	}
-	l.zap.Warn(message, fields...)
+	l.zap.Warn(msg, fields...)
 }
 
 // Error logs a message at ErrorLevel. The message includes any fields passed at the log site, as well as any fields accumulated on the logger.
-func (l *Logger) Error(message string, fields ...zapcore.Field) {
+func (l *Logger) Error(msg string, fields ...zapcore.Field) {
 	if l == nil {
 		return
 	}
-	l.zap.Error(message, fields...)
+	l.zap.Error(msg, fields...)
 }
 
 // Fatal logs a message at FatalLevel. The message includes any fields passed at the log site, as well as any fields accumulated on the logger.
-func (l *Logger) Fatal(message string, fields ...zapcore.Field) {
+func (l *Logger) Fatal(msg string, fields ...zapcore.Field) {
 	if l == nil {
 		return
 	}
-	l.zap.Fatal(message, fields...)
+	l.zap.Fatal(msg, fields...)
+}
+
+// Debugw logs a message at DebugLevel by SugardLogger. The message includes any fields passed at the log site, as well as any fields accumulated on the logger.
+func (l *Logger) Debugw(msg string, keysAndValues ...interface{}) {
+	if l == nil {
+		return
+	}
+	sugar := l.zap.Sugar()
+	sugar.Debugw(msg, keysAndValues...)
+}
+
+// Infow logs a message at InfoLevel by SugardLogger. The message includes any fields passed at the log site, as well as any fields accumulated on the logger.
+func (l *Logger) Infow(msg string, keysAndValues ...interface{}) {
+	if l == nil {
+		return
+	}
+	sugar := l.zap.Sugar()
+	sugar.Infow(msg, keysAndValues...)
+}
+
+// Warnw logs a message at WarnLevel by SugardLogger. The message includes any fields passed at the log site, as well as any fields accumulated on the logger.
+func (l *Logger) Warnw(msg string, keysAndValues ...interface{}) {
+	if l == nil {
+		return
+	}
+	sugar := l.zap.Sugar()
+	sugar.Warnw(msg, keysAndValues...)
+}
+
+// Errorw logs a message at ErrorLevel by SugardLogger. The message includes any fields passed at the log site, as well as any fields accumulated on the logger.
+func (l *Logger) Errorw(msg string, keysAndValues ...interface{}) {
+	if l == nil {
+		return
+	}
+	sugar := l.zap.Sugar()
+	sugar.Errorw(msg, keysAndValues...)
+}
+
+// Fatalw logs a message at FatalLevel by SugardLogger. The message includes any fields passed at the log site, as well as any fields accumulated on the logger.
+func (l *Logger) Fatalw(msg string, keysAndValues ...interface{}) {
+	if l == nil {
+		return
+	}
+	sugar := l.zap.Sugar()
+	sugar.Fatalw(msg, keysAndValues...)
 }
 
 // Debugf logs a message at DebugLevel.
