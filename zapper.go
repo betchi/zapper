@@ -1,7 +1,6 @@
 package zapper
 
 import (
-	"fmt"
 	"os"
 
 	"go.uber.org/zap"
@@ -243,52 +242,4 @@ func (l *Logger) Fatalw(msg string, keysAndValues ...interface{}) {
 	}
 	sugar := l.zap.Sugar()
 	sugar.Fatalw(msg, keysAndValues...)
-}
-
-// Debugf logs a message at DebugLevel.
-func (l *Logger) Debugf(format string, args ...interface{}) {
-	if l == nil {
-		return
-	}
-	l.zap.Debug(fmt.Sprintf(format, args...))
-}
-
-// Infof logs a message at InfoLevel.
-func (l *Logger) Infof(format string, args ...interface{}) {
-	if l == nil {
-		return
-	}
-	l.zap.Info(fmt.Sprintf(format, args...))
-}
-
-// Warnf logs a message at WarnLevel.
-func (l *Logger) Warnf(format string, args ...interface{}) {
-	if l == nil {
-		return
-	}
-	l.zap.Warn(fmt.Sprintf(format, args...))
-}
-
-// Errorf logs a message at ErrorLevel.
-func (l *Logger) Errorf(format string, args ...interface{}) {
-	if l == nil {
-		return
-	}
-	l.zap.Error(fmt.Sprintf(format, args...))
-}
-
-// Fatalf logs a message at FatalLevel.
-func (l *Logger) Fatalf(format string, args ...interface{}) {
-	if l == nil {
-		return
-	}
-	l.zap.Fatal(fmt.Sprintf(format, args...))
-}
-
-// Printf logs a message at DebugLevel. For gorp trace message
-func (l *Logger) Printf(format string, args ...interface{}) {
-	if l == nil {
-		return
-	}
-	l.zap.Debug(fmt.Sprintf(format, args...))
 }
