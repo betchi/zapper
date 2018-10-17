@@ -29,5 +29,5 @@ func (l *Logger) Infof(msg string, args ...interface{}) {
 		return
 	}
 
-	zapper.GlobalLogger().Infow(msg, args)
+	zapper.GlobalLogger().Infow(msg, args...)
 }
