@@ -1,6 +1,8 @@
 package gorp
 
 import (
+	"fmt"
+
 	"github.com/betchi/zapper"
 )
 
@@ -29,5 +31,5 @@ func (l *Logger) Infof(msg string, args ...interface{}) {
 		return
 	}
 
-	zapper.GlobalLogger().Infow(msg, args...)
+	zapper.GlobalLogger().Info(fmt.Sprintf(msg, args...))
 }

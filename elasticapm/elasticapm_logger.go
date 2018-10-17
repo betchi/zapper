@@ -1,6 +1,8 @@
 package elasticapm
 
 import (
+	"fmt"
+
 	"github.com/betchi/zapper"
 )
 
@@ -20,7 +22,7 @@ func (l *Logger) Debugf(format string, args ...interface{}) {
 		return
 	}
 
-	zapper.GlobalLogger().Debugw(format, args...)
+	zapper.GlobalLogger().Debug(fmt.Sprintf(format, args...))
 }
 
 // Errorf logs a message at ErrorLevel for elastic apm
@@ -29,5 +31,5 @@ func (l *Logger) Errorf(format string, args ...interface{}) {
 		return
 	}
 
-	zapper.GlobalLogger().Errorw(format, args...)
+	zapper.GlobalLogger().Error(fmt.Sprintf(format, args...))
 }
