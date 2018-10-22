@@ -15,7 +15,7 @@ type Config struct {
 
 // Logger is a logger for gorp
 type Logger struct {
-	Noop bool
+	noop bool
 	v    int
 }
 
@@ -26,7 +26,7 @@ var (
 // InitGlobalLogger initialize global logger for jaeger
 func InitGlobalLogger(config *Config) {
 	logger = &Logger{
-		Noop: config.Noop,
+		noop: config.Noop,
 	}
 
 	vLevel := os.Getenv("GRPC_GO_LOG_VERBOSITY_LEVEL")
@@ -42,7 +42,7 @@ func GlobalLogger() *Logger {
 
 // Info logs to INFO log. Arguments are handled in the manner of fmt.Print.
 func (l *Logger) Info(args ...interface{}) {
-	if l == nil || l.Noop {
+	if l == nil || l.noop {
 		return
 	}
 
@@ -51,7 +51,7 @@ func (l *Logger) Info(args ...interface{}) {
 
 // Infoln logs to INFO log. Arguments are handled in the manner of fmt.Println.
 func (l *Logger) Infoln(args ...interface{}) {
-	if l == nil || l.Noop {
+	if l == nil || l.noop {
 		return
 	}
 
@@ -60,7 +60,7 @@ func (l *Logger) Infoln(args ...interface{}) {
 
 // Infof logs to INFO log. Arguments are handled in the manner of fmt.Printf.
 func (l *Logger) Infof(format string, args ...interface{}) {
-	if l == nil || l.Noop {
+	if l == nil || l.noop {
 		return
 	}
 
@@ -69,52 +69,52 @@ func (l *Logger) Infof(format string, args ...interface{}) {
 
 // Warning logs to WARNING log. Arguments are handled in the manner of fmt.Print.
 func (l *Logger) Warning(args ...interface{}) {
-	if l == nil || l.Noop {
+	if l == nil || l.noop {
 		return
 	}
 
-	zapper.GlobalLogger().Warnw("", args)
+	zapper.GlobalLogger().Warn(fmt.Sprint(args...))
 }
 
 // Warningln logs to WARNING log. Arguments are handled in the manner of fmt.Println.
 func (l *Logger) Warningln(args ...interface{}) {
-	if l == nil || l.Noop {
+	if l == nil || l.noop {
 		return
 	}
 
-	zapper.GlobalLogger().Warnw("", args)
+	zapper.GlobalLogger().Warn(fmt.Sprintln(args...))
 }
 
 // Warningf logs to WARNING log. Arguments are handled in the manner of fmt.Printf.
 func (l *Logger) Warningf(format string, args ...interface{}) {
-	if l == nil || l.Noop {
+	if l == nil || l.noop {
 		return
 	}
 
-	zapper.GlobalLogger().Warn(fmt.Sprintf(format, args...))
+	zapper.GlobalLogger().Warn(fmt.Sprint(args...))
 }
 
 // Error logs to ERROR log. Arguments are handled in the manner of fmt.Print.
 func (l *Logger) Error(args ...interface{}) {
-	if l == nil || l.Noop {
+	if l == nil || l.noop {
 		return
 	}
 
-	zapper.GlobalLogger().Errorw("", args)
+	zapper.GlobalLogger().Error(fmt.Sprint(args...))
 }
 
 // Errorln logs to ERROR log. Arguments are handled in the manner of fmt.Println.
 func (l *Logger) Errorln(args ...interface{}) {
-	if l == nil || l.Noop {
+	if l == nil || l.noop {
 		return
 	}
 
-	zapper.GlobalLogger().Errorw("", args)
+	zapper.GlobalLogger().Error(fmt.Sprintln(args...))
 }
 
 // Errorf logs to ERROR log. Arguments are handled in the manner of fmt.Printf.
 func (l *Logger) Errorf(format string, args ...interface{}) {
-	if l == nil || l.Noop {
+	if l == nil || l.noop {
 		return
 	}
 
@@ -125,29 +125,29 @@ func (l *Logger) Errorf(format string, args ...interface{}) {
 // gRPC ensures that all Fatal logs will exit with os.Exit(1).
 // Implementations may also call os.Exit() with a non-zero exit code.
 func (l *Logger) Fatal(args ...interface{}) {
-	if l == nil || l.Noop {
+	if l == nil || l.noop {
 		return
 	}
 
-	zapper.GlobalLogger().Fatalw("", args)
+	zapper.GlobalLogger().Fatal(fmt.Sprint(args...))
 }
 
 // Fatalln logs to ERROR log. Arguments are handled in the manner of fmt.Println.
 // gRPC ensures that all Fatal logs will exit with os.Exit(1).
 // Implementations may also call os.Exit() with a non-zero exit code.
 func (l *Logger) Fatalln(args ...interface{}) {
-	if l == nil || l.Noop {
+	if l == nil || l.noop {
 		return
 	}
 
-	zapper.GlobalLogger().Fatalw("", args)
+	zapper.GlobalLogger().Fatal(fmt.Sprintln(args...))
 }
 
 // Fatalf logs to ERROR log. Arguments are handled in the manner of fmt.Printf.
 // gRPC ensures that all Fatal logs will exit with os.Exit(1).
 // Implementations may also call os.Exit() with a non-zero exit code.
 func (l *Logger) Fatalf(format string, args ...interface{}) {
-	if l == nil || l.Noop {
+	if l == nil || l.noop {
 		return
 	}
 

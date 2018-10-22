@@ -13,7 +13,7 @@ type Config struct {
 
 // Logger is a logger for elastic apm
 type Logger struct {
-	Noop bool
+	noop bool
 }
 
 var logger *Logger
@@ -21,7 +21,7 @@ var logger *Logger
 // InitGlobalLogger initialize global logger for elastic apm
 func InitGlobalLogger(config *Config) {
 	logger = &Logger{
-		Noop: config.Noop,
+		noop: config.Noop,
 	}
 }
 
@@ -32,7 +32,7 @@ func GlobalLogger() *Logger {
 
 // Debugf logs a message at DebugLevel for elastic apm
 func (l *Logger) Debugf(format string, args ...interface{}) {
-	if l == nil || l.Noop {
+	if l == nil || l.noop {
 		return
 	}
 
@@ -41,7 +41,7 @@ func (l *Logger) Debugf(format string, args ...interface{}) {
 
 // Errorf logs a message at ErrorLevel for elastic apm
 func (l *Logger) Errorf(format string, args ...interface{}) {
-	if l == nil || l.Noop {
+	if l == nil || l.noop {
 		return
 	}
 
